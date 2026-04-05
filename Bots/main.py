@@ -15,7 +15,7 @@ def writeFile(fileName, obj):
         json.dump(obj, file, ensure_ascii=False, indent=4)
 
 
-Token = openFile('API.json')['Token']
+Token = openFile('API.json')['token']
 
 bot = telebot.TeleBot(Token)
 
@@ -173,17 +173,24 @@ def confirmOrder(message):
 
 def adresHandler(message):
     location = 'Напишите текст или геометку Telegram'
+    userId = message.from_user.id
     if message.content_type == 'location':
         location = f'{message.location.latitude}, {message.location.longitude}'
     elif message.content_type == 'text':
         location = message.text
     data = openFile('userInfo.json')
-    userInfo = data.get(str(message.from_user.id), {})
+    userInfo = data.get(str(userId), {})
     userInfo['adres'] = location
-    data[str(message.from_user.id)] = userInfo
+    data[str(userId)] = userInfo
     writeFile('userInfo.json', data)
-    bot.send_message(message.from_user.id, f'Ваш адресс: {userInfo['adres']}', reply_markup=generateStartKeyboard())
-    bot.send_message(message.from_user.id, 'Доступна оплата только наличными курьеру.')
+    bot.send_message(userId, f'Ваш адресс: {userInfo['adres']}', reply_markup=generateStartKeyboard())
+    userCart = openFile('carts.json')[str(userId)]
+    total = 0
+    for userCart in menu_items:
+        total =+ menu_items[userCart]['price']
+    print(total)
+
+    bot.send_message(userId, f'Сумма заказа: {}руб')
 
 @bot.message_handler(commands=['add_info'])
 def addInfo(message):
