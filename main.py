@@ -183,6 +183,14 @@ def adresHandler(message):
     data[str(message.from_user.id)] = userInfo
     writeFile('userInfo.json', data)
     bot.send_message(message.from_user.id, f'Ваш адресс: {userInfo["adres"]}', reply_markup=generateStartKeyboard())
+    userCart = openFile('carts.json')[str(message.from_user.id)]
+    total = 0
+    for dish, count in userCart.items():
+        for item in menu_items:
+            if item['name'] == dish:
+                total += item['price'] * count
+
+    bot.send_message(message.from_user.id, f'Сумма заказа: {total} руб')
     bot.send_message(message.from_user.id, 'Доступна оплата только наличными курьеру.')
     bot.send_message(message.from_user.id, 'Ваш заказ начал готовится.')
     bot.send_message(5476102892, f'Поступил закакз от @{message.from_user.username}:\n'
