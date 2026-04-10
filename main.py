@@ -182,7 +182,7 @@ def adresHandler(message):
     userInfo['adres'] = location
     data[str(message.from_user.id)] = userInfo
     writeFile('userInfo.json', data)
-    bot.send_message(message.from_user.id, f'Ваш адресс: {userInfo['adres']}', reply_markup=generateStartKeyboard())
+    bot.send_message(message.from_user.id, f'Ваш адресс: {userInfo["adres"]}', reply_markup=generateStartKeyboard())
     bot.send_message(message.from_user.id, 'Доступна оплата только наличными курьеру.')
 
 @bot.message_handler(commands=['add_info'])
