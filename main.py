@@ -167,11 +167,11 @@ def confirmOrder(message):
                          reply_markup=keyboard)
     elif message.text == 'Да':
         bot.send_message(message.from_user.id, 'Пожалуста, напишите адрес доставки или отправьте геометку Telegram.')
-        bot.register_next_step_handler_by_chat_id(int(message.from_user.id), adresHandler)
+        bot.register_next_step_handler_by_chat_id(int(message.from_user.id), orderHandler)
 
 
 
-def adresHandler(message):
+def orderHandler(message):
     location = 'Напишите текст или геометку Telegram'
     if message.content_type == 'location':
         location = f'{message.location.latitude}, {message.location.longitude}'
